@@ -186,17 +186,22 @@ function updateRole() {
     inquirer.prompt([
         {
             type: "input",
-            name: "firstName",
+            name: "newFirstName",
             message: "Enter new first name?"
         },
         {
             type: "input",
-            name: "lastName",
+            name: "newLastName",
             message: "Enter new last name? "
         },
         {
             type: "input",
-            name: "roleId",
+            name: "newRoleId",
+            message: "Whats the new role id?"
+        },
+        {
+            type: "input",
+            name: "newRoleId",
             message: "Whats the new role id?"
         }
 
@@ -206,7 +211,7 @@ function updateRole() {
         var newRoleId = data.roleId;
         var query = "UPDATE employee SET role_id = ? WHERE first_name = ? AND last_name = ?";
 
-        connection.query(query, [newFirstName, newLastName, newRoleId, newManagerId], function (err) {
+        connection.query(query, [newFirstName, newLastName, newRoleId], function (err) {
             if (err) throw err;
 
             console.log("Your new roles have been added.");
