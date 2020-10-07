@@ -36,10 +36,23 @@ function start() {
                 case "View all Roles":
                     return viewRoles();
                     break;
-                case "view all Employees":
+                case "View all Employees":
                     return viewEmployees();
                     break;
+                case "Add a Department":
+                    return addDepartment();
+                    break;
+                case "Add a Role":
+                    return addRole();
+                    break;
+                case "Add an Employee":
+                    return addEmployee();
+                    break;
+                case "Update Role":
+                    return updateRole();
+                    break;
                 default:
+                    console.log("Goodbye");
                     connection.end();
             }
         })
@@ -74,18 +87,132 @@ function viewEmployees() {
 
 function addDepartment() {
     //use inquirer to ask the user what department they would like to add
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "department",
+            message: "Enter the department's name:",
+            // validate: validateString
+        }
+        //in the promise of inquirer add the department to the DB and the view all departments
+    ]).then(function (data) {
+        var newDepartment = data.department;
+        var query = "INSERT INTO department(name) VALUE (?)";
 
-    //in the promise of inquirer add the department to the DB and the view all departments
+        connection.query(query, newDepartment, function (err) {
+            if (err) throw err;
+
+            console.log("Your new department has been added.");
+            viewDepartment();
+        });
+    });
 }
 
 function addRole() {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "title",
+            message: "Enter role name?"
+        },
+        {
+            type: "input",
+            name: "salary",
+            message: "whats the salary? "
+        },
+        {
+            type: "input",
+            name: "departmentId",
+            message: "Whats the department id?"
+        }
+        //in the promise of inquirer add the department to the DB and the view all departments
+    ]).then(function (data) {
+        var newTitle = data.title;
+        var newSalary = data.salary;
+        var newDepartmentId = data.departmentId;
+        var query = "INSERT INTO role (title,salary,department_id) VALUE (?,?,?)";
+
+        connection.query(query, [newTitle, newSalary, newDepartmentId], function (err) {
+            if (err) throw err;
+
+            console.log("Your new roles have been added.");
+            viewRoles();
+        });
+    });
 
 }
 
 function addEmployee() {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "firstName",
+            message: "Enter first name?"
+        },
+        {
+            type: "input",
+            name: "lastName",
+            message: "Enter last name? "
+        },
+        {
+            type: "input",
+            name: "roleId",
+            message: "Whats the role id?"
+        },
+        {
+            type: "input",
+            name: "managerId",
+            message: "Whats the manager id?"
+        }
 
+        //in the promise of inquirer add the department to the DB and the view all departments
+    ]).then(function (data) {
+        var newFirstName = data.firstName;
+        var newLastName = data.lastName;
+        var newRoleId = data.roleId;
+        var newManagerId = data.managerId;
+        var query = "INSERT INTO employee (first_name,last_name,role_id,manager_id) VALUE (?,?,?,?)";
+
+        connection.query(query, [newFirstName, newLastName, newRoleId, newManagerId], function (err) {
+            if (err) throw err;
+
+            console.log("Your new roles have been added.");
+            viewEmployees();
+        });
+    });
 }
 
 function updateRole() {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "firstName",
+            message: "Enter new first name?"
+        },
+        {
+            type: "input",
+            name: "lastName",
+            message: "Enter new last name? "
+        },
+        {
+            type: "input",
+            name: "roleId",
+            message: "Whats the new role id?"
+        }
 
+    ]).then(function (data) {
+        var newFirstName = data.firstName;
+        var newLastName = data.lastName;
+        var newRoleId = data.roleId;
+        var query = "UPDATE employee SET role_id = ? WHERE first_name = ? AND last_name = ?";
+
+        connection.query(query, [newFirstName, newLastName, newRoleId, newManagerId], function (err) {
+            if (err) throw err;
+
+            console.log("Your new roles have been added.");
+            viewEmployees();
+        });
+    });
 }
+
+// var query = "UPDATE employee SET role_id = ? WHERE first_name = ? AND last_name = ?";
