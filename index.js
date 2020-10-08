@@ -211,7 +211,7 @@ function updateRole() {
         var newRoleId = data.roleId;
         var query = "UPDATE employee SET role_id = ? WHERE first_name = ? AND last_name = ?";
 
-        connection.query(query, [newFirstName, newLastName, newRoleId], function (err) {
+        connection.query(query, [newRoleId, newFirstName, newLastName], function (err) {
             if (err) throw err;
 
             console.log("Your new roles have been added.");
